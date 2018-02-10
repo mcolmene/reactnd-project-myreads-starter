@@ -26,7 +26,7 @@ class BooksApp extends React.Component {
     onChange = (value, book) => {
         BooksAPI.update(book, value)
             .then(() => {
-                const newState = this.state;
+                const newState = Object.assign({}, this.state);
                 const index = this.state.books.findIndex((obj) => obj.id === book.id);
                 newState.books[index].shelf = value;
                 this.setState(newState)
