@@ -13,11 +13,6 @@ export default class Search extends Component {
             books: []
         }
     }
-    componentDidMount() {
-        BooksAPI.getAll()
-            .then(result => console.log(result))
-            .catch(err => console.log(err))
-    }
     onChange = (value, book) => {
         BooksAPI.update(book, value)
             .then((status) => {
