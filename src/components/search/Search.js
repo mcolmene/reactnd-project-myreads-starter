@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { DebounceInput } from 'react-debounce-input';
 import * as BooksAPI from '../../api/BooksAPI'
 import Book from "../common/Book";
+import deepCopy from '../../utils/helpers';
+
 
 export default class Search extends Component {
     constructor(props) {
@@ -19,10 +22,9 @@ export default class Search extends Component {
         BooksAPI.update(book, value)
             .then((status) => {
                 this.props.updateShelf();
-                const newState = this.state;
+                const newState = deepCopy(this.state);
                 const index = this.state.books.findIndex((obj) => obj.id === book.id);
                 newState.books[index].shelf = value;
-                console.log('newState', newState.books[index].shelf);
                 this.setState(newState)
             })
             .catch(err => console.log(err))
@@ -55,7 +57,9 @@ export default class Search extends Component {
                 <div className="search-books-bar">
                     <Link className="close-search" to={'/'}>Close</Link>
                     <div className="search-books-input-wrapper">
-                        <input
+                        <DebounceInput
+                            minLength={2}
+                            debounceTimeout={500}
                             type="text"
                             placeholder="Search by title or author"
                             onChange={this.onInputChange}
